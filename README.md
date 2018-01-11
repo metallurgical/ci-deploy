@@ -279,6 +279,10 @@ show_version:
     - scp index.php user@<hostname>.138:/var/www/<project-root> # secure copy file from container(gitlab-runner container) to application's server(assume we have separate server for gitlab-runner and application server)
 ```
 
+We can add the job as many as we want. You can run phpunit to test, install composer dependencies, npm dependencies, or anything else. Head over to gitlab's documentation for advanced usage of keywords inside `.gitlab-ci.yml`.
+
+Finally push the code into gitlab and the job will automatically executed by the gitlab-runner. View the CI/CD section on repository to check status of current task that was executed.
+
  
 
 
