@@ -276,7 +276,7 @@ show_version:
   script:
     - php -v # see php version
     - ls -al # list all the files pull from gitlab
-    - scp index.php user@<hostname>.138:/var/www/<project-root> # secure copy file from container(gitlab-runner container) to application's server(assume we have separate server for gitlab-runner and application server)
+    - scp index.php user@<hostname>:/var/www/<project-root> # secure copy file from container(gitlab-runner container) to application's server(assume we have separate server for gitlab-runner and application server)
 ```
 
 We can add the job as many as we want. You can run phpunit to test, install composer dependencies, npm dependencies, or anything else. Head over to gitlab's documentation for advanced usage of keywords inside `.gitlab-ci.yml`.
