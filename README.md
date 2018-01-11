@@ -247,6 +247,38 @@ This variable will available inside `.gitlab-ci.yml` and we'll using this key to
 
 This file is actually the file that gitlab will read after pushing our commit into remote repository. This file contains set of instruction or jobs in order to do `CI/CD` which eventually run the job specified inside the file. Gitlab-runner will run the job specified inside this file and will show the progress/status under `CI/CD` section on project repository.
 
+```yaml
+image: php:7.1-apache # using existing image from docker-hub
+
+before_script:
+  # Install ssh-agent if not already installed, it is required by Docker.
+  # (change apt-get to yum if you use a CentOS-based image)
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+  # Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+
+  # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+  # For Docker builds disable host key checking. Be aware that by adding that
+  # you are suspectible to man-in-the-middle attacks.
+  # WARNING: Use this only with the Docker executor, if you use it with shell
+  # you will overwrite your user's SSH config.
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+stages: # can have test, build and deploy, etc...
+  - deploy
+
+show_version:
+  stage: deploy
+  script:
+    - php -v # see php version
+    - ls -al # list all the files pull from gitlab
+    - scp index.php user@<hostname>.138:/var/www/<project-root> # secure copy file from container(gitlab-runner container) to application's server(assume we have separate server for gitlab-runner and application server)
+```
+
  
 
 
