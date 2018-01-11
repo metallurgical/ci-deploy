@@ -211,7 +211,7 @@ Docker CE is installed and running. The docker group is created but no users are
 
 This key are useful for deployment after we test and build our application. Means that, the deployment occured on `gitlab-runner`'s host from gitlab-runner's container.
 
-Open Terminal. And run ssh-keygen command to create key-valued pair :
+Open Terminal(local development). And run ssh-keygen command to create key-valued pair :
 
 ```
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
@@ -238,6 +238,14 @@ Enter passphrase (empty for no passphrase): [Type a passphrase]
 Enter same passphrase again: [Type passphrase again]
 ```
 
+Once finished, copy the content of private key of `id_rsa` and put it inside gitlab's repository. Once copied, go to **Settings -> CI/CD -> Secret Variables -> Add variable.** Create variable with name `SSH_PRIVATE_KEY` and paste private key's content and press `Add New Variable`'s button.
+
+This variable will available inside `.gitlab-ci.yml` and we'll using this key to communicate between `gitlab-runner`'s server with `application`'s server for deployment.(Assume we have separate server that host gitlab-runner and application).
+
+
+### Create .gitlab-ci.yml file inside root project repository
+
+This file is actually the file that gitlab will read after pushing our commit into remote repository. This file contains set of instruction or jobs in order to do `CI/CD` which eventually run the job specified inside the file. Gitlab-runner will run the job specified inside this file and will show the progress/status under `CI/CD` section on project repository.
 
  
 
